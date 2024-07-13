@@ -1,4 +1,4 @@
-import React from "react";
+import { ChangeEvent, useEffect, useState } from "react";
 import {
   Box,
   Select,
@@ -7,20 +7,33 @@ import {
   InputAdornment,
 } from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
+import { debounce } from "../utils";
 
 interface FilterControlsProps {
   filter: "all" | "starred";
   onFilterChange: (filter: "all" | "starred") => void;
-  searchQuery: string;
   onSearchChange: (query: string) => void;
 }
 
 export default function FilterControls({
   filter,
   onFilterChange,
-  searchQuery,
   onSearchChange,
 }: FilterControlsProps) {
+  const [searchQuery, setSearchQuery] = useState("");
+
+  const debouncedSearch = debounce((query: string) => {
+    onSearchChange(query);
+  }, 500);
+
+  useEffect(() => {
+    debouncedSearch(searchQuery);
+  }, [searchQuery, debouncedSearch]);
+
+  const handleSearchChange = (event: ChangeEvent<HTMLInputElement>) => {
+    setSearchQuery(event.target.value);
+  };
+
   return (
     <Box sx={{ display: "flex", justifyContent: "space-between", mb: 2 }}>
       <Select
@@ -34,7 +47,7 @@ export default function FilterControls({
       <TextField
         placeholder="Search robot ID or location"
         value={searchQuery}
-        onChange={(e) => onSearchChange(e.target.value)}
+        onChange={handleSearchChange}
         InputProps={{
           startAdornment: (
             <InputAdornment position="start">
