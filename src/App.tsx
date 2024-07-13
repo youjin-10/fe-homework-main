@@ -10,17 +10,7 @@ import "@fontsource/poppins/600.css";
 function App() {
   return (
     <ThemeProvider theme={customTheme}>
-      <Container
-        // fixed
-        sx={
-          {
-            // mt: "40px",
-            // mb: "73px",
-            // ml: "52px",
-            // fontFamily: "poppins",
-          }
-        }
-      >
+      <Container>
         <FleetDashboard />
       </Container>
     </ThemeProvider>
