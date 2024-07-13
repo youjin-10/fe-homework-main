@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import {
   DataGrid,
   GridColDef,
@@ -9,8 +9,7 @@ import { IconButton, Tooltip } from "@mui/material";
 import StarBorderIcon from "@mui/icons-material/StarBorder";
 import StarIcon from "@mui/icons-material/Star";
 import CircleIcon from "@mui/icons-material/Circle";
-
-const PAGE_SIZE = 6;
+import { PAGE_SIZE } from "../../constants";
 
 interface Location {
   id: number;
@@ -69,9 +68,13 @@ export default function LocationTable({
           throw new Error("Network response was not ok");
         }
         const data = await response.json();
-        setStarredLocationIds(data.location_ids);
+
+        setStarredLocationIds(
+          Array.isArray(data.location_ids) ? data.location_ids : []
+        );
       } catch (error) {
         console.error("Error fetching starred location ids:", error);
+        setStarredLocationIds([]);
       }
     };
 
@@ -81,14 +84,24 @@ export default function LocationTable({
 
   const handleStarLocation = async (locationId: number, isStarred: boolean) => {
     try {
-      const newStarredIds = isStarred
-        ? [...starredLocationIds, locationId]
-        : starredLocationIds.filter((id) => id !== locationId);
+      let newStarredIds: number[];
+      if (isStarred) {
+        newStarredIds = [...starredLocationIds, locationId];
+      } else {
+        newStarredIds = starredLocationIds.filter((id) => id !== locationId);
+      }
 
-      await fetch("/starred_location_ids", {
+      const response = await fetch("/starred_location_ids", {
         method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
         body: JSON.stringify(newStarredIds),
       });
+
+      if (!response.ok) {
+        throw new Error("Failed to update starred locations");
+      }
 
       setStarredLocationIds(newStarredIds);
     } catch (error) {
