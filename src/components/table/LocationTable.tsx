@@ -125,7 +125,7 @@ export default function LocationTable({
           }
         >
           {starredLocationIds.includes(params.row.id) ? (
-            <StarIcon color="primary" />
+            <StarIcon color="notice" />
           ) : (
             <StarBorderIcon />
           )}
@@ -134,7 +134,7 @@ export default function LocationTable({
     },
     {
       field: "name",
-      headerName: "Location",
+      headerName: "Locations",
       flex: 1,
       renderCell: (params: GridRenderCellParams) => (
         <Tooltip
@@ -150,7 +150,7 @@ export default function LocationTable({
     },
     {
       field: "robot",
-      headerName: "Robot",
+      headerName: "Robots",
       flex: 1,
       renderCell: (params: GridRenderCellParams) =>
         params.value.id ? (
