@@ -6,12 +6,11 @@ import {
   GridRenderCellParams,
 } from "@mui/x-data-grid";
 import { PAGE_SIZE } from "../../constants";
-
 import StarCell from "./StarCell";
 import LocationNameCell from "./LocationNameCell";
 import RobotCell from "./RobotCell";
-
 import { Location } from "../../mocks/db";
+import CustomPagination from "./CustomPagination";
 
 interface LocationTableProps {
   filter: "all" | "starred";
@@ -135,6 +134,10 @@ export default function LocationTable({
   return (
     <div style={{ height: 400, width: "100%" }}>
       <DataGrid
+        pagination
+        slots={{
+          pagination: CustomPagination,
+        }}
         rows={locations}
         columns={columns}
         paginationModel={paginationModel}
