@@ -5,11 +5,11 @@ import {
   GridPaginationModel,
   GridRenderCellParams,
 } from "@mui/x-data-grid";
-import { IconButton, Tooltip } from "@mui/material";
-import StarBorderIcon from "@mui/icons-material/StarBorder";
-import StarIcon from "@mui/icons-material/Star";
-import CircleIcon from "@mui/icons-material/Circle";
 import { PAGE_SIZE } from "../../constants";
+
+import StarCell from "./StarCell";
+import LocationNameCell from "./LocationNameCell";
+import RobotCell from "./RobotCell";
 
 interface Location {
   id: number;
@@ -116,20 +116,11 @@ export default function LocationTable({
       headerName: "",
       width: 50,
       renderCell: (params: GridRenderCellParams) => (
-        <IconButton
-          onClick={() =>
-            handleStarLocation(
-              params.row.id,
-              !starredLocationIds.includes(params.row.id)
-            )
-          }
-        >
-          {starredLocationIds.includes(params.row.id) ? (
-            <StarIcon color="notice" />
-          ) : (
-            <StarBorderIcon />
-          )}
-        </IconButton>
+        <StarCell
+          {...params}
+          starredLocationIds={starredLocationIds}
+          onStarLocation={handleStarLocation}
+        />
       ),
     },
     {
@@ -137,36 +128,14 @@ export default function LocationTable({
       headerName: "Locations",
       flex: 1,
       renderCell: (params: GridRenderCellParams) => (
-        <Tooltip
-          title={params.row.robot.is_online ? "Robot Online" : "Robot Offline"}
-        >
-          <span
-            style={{ color: params.row.robot.is_online ? "blue" : "inherit" }}
-          >
-            {params.value}
-          </span>
-        </Tooltip>
+        <LocationNameCell {...params} />
       ),
     },
     {
       field: "robot",
       headerName: "Robots",
       flex: 1,
-      renderCell: (params: GridRenderCellParams) =>
-        params.value.id ? (
-          <span>
-            <CircleIcon
-              style={{
-                color: params.value.is_online ? "green" : "grey",
-                fontSize: "small",
-                marginRight: "5px",
-              }}
-            />
-            {params.value.id}
-          </span>
-        ) : (
-          <span style={{ color: "blue", cursor: "pointer" }}>Add</span>
-        ),
+      renderCell: (params: GridRenderCellParams) => <RobotCell {...params} />,
     },
   ];
 
