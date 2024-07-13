@@ -7,6 +7,7 @@ import {
   InputAdornment,
 } from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
+import StarIcon from "@mui/icons-material/Star";
 import { debounce } from "../utils";
 
 interface FilterControlsProps {
@@ -42,7 +43,17 @@ export default function FilterControls({
         sx={{ minWidth: 150 }}
       >
         <MenuItem value="all">All Locations</MenuItem>
-        <MenuItem value="starred">Starred</MenuItem>
+        <MenuItem value="starred">
+          <Box
+            sx={{
+              display: "flex",
+              alignItems: "center",
+            }}
+          >
+            <StarIcon color="notice" />
+            <span>Starred</span>
+          </Box>
+        </MenuItem>
       </Select>
       <TextField
         placeholder="Search robot ID or location"
