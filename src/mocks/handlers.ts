@@ -1,32 +1,46 @@
-import { DefaultBodyType, rest } from "msw";
-
-import { Location } from "./db";
+import { rest } from "msw";
+import { Location, locations } from "./db";
+import { PAGE_SIZE } from "../constants";
 
 interface LocationsResult {
   total_count: number;
   locations: Location[];
 }
 
-interface LocationsPathParams {
-  page: string;
-  location_name: string;
-  robot_id: string;
-  is_starred: string;
-}
-
 export const handlers = [
-  rest.get<DefaultBodyType, LocationsPathParams, LocationsResult>(
-    "/locations",
-    (req, res, ctx) => {
-      // Please implement filtering feature here
-      const result: LocationsResult = {
-        total_count: 0,
-        locations: [],
-      };
+  rest.get("/locations", (req, res, ctx) => {
+    const page = parseInt(req.url.searchParams.get("page") || "1");
+    const search = req.url.searchParams.get("search") || "";
+    const isStarred = req.url.searchParams.get("is_starred") === "true";
+    const pageSize = PAGE_SIZE;
 
-      return res(ctx.status(200), ctx.json(result));
-    }
-  ),
+    let filteredLocations = locations.filter((location) => {
+      const matchesSearch =
+        location.name.toLowerCase().includes(search.toLowerCase()) ||
+        location.robot?.id.toLowerCase().includes(search.toLowerCase());
+
+      const starredMatch = isStarred
+        ? JSON.parse(
+            sessionStorage.getItem("starred_location_ids") || "[]"
+          ).includes(location.id)
+        : true;
+
+      return matchesSearch && starredMatch;
+    });
+
+    const totalCount = filteredLocations.length;
+    const paginatedLocations = filteredLocations.slice(
+      (page - 1) * pageSize,
+      page * pageSize
+    );
+
+    const result: LocationsResult = {
+      total_count: totalCount,
+      locations: paginatedLocations,
+    };
+
+    return res(ctx.status(200), ctx.json(result));
+  }),
 
   rest.get("/starred_location_ids", (req, res, ctx) => {
     const location_ids = JSON.parse(
