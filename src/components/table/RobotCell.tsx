@@ -3,7 +3,7 @@ import CircleIcon from "@mui/icons-material/Circle";
 import { GridRenderCellParams } from "@mui/x-data-grid";
 
 export default function RobotCell({ value }: GridRenderCellParams) {
-  return value.id ? (
+  return value ? (
     <span>
       <CircleIcon
         color={value.is_online ? "success" : "disabled"}

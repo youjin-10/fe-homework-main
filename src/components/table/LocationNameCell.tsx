@@ -15,7 +15,7 @@ const LocationNameButton = styled(Button)<ButtonProps>(({ theme }) => ({
 
 export default function LocationNameCell({ row, value }: GridRenderCellParams) {
   return (
-    <LocationNameButton disabled={!row.robot.is_online} variant="contained">
+    <LocationNameButton disabled={!row.robot?.is_online} variant="contained">
       {value}
     </LocationNameButton>
   );
