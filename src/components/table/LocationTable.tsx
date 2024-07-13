@@ -11,14 +11,7 @@ import StarCell from "./StarCell";
 import LocationNameCell from "./LocationNameCell";
 import RobotCell from "./RobotCell";
 
-interface Location {
-  id: number;
-  name: string;
-  robot: {
-    id: string;
-    is_online: boolean;
-  };
-}
+import { Location } from "../../mocks/db";
 
 interface LocationTableProps {
   filter: "all" | "starred";
