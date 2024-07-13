@@ -1,20 +1,15 @@
 import FleetDashboard from "./components/FleetDashboard";
-import { Container, ThemeProvider, createTheme } from "@mui/material";
+import { Container, ThemeProvider } from "@mui/material";
+import { customTheme } from "./customTheme";
 
 import "@fontsource/poppins/300.css";
 import "@fontsource/poppins/400.css";
 import "@fontsource/poppins/500.css";
 import "@fontsource/poppins/600.css";
 
-const theme = createTheme({
-  typography: {
-    fontFamily: ["poppins", "Roboto"].join(","),
-  },
-});
-
 function App() {
   return (
-    <ThemeProvider theme={theme}>
+    <ThemeProvider theme={customTheme}>
       <Container
         // fixed
         sx={
