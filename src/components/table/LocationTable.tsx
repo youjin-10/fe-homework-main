@@ -37,7 +37,7 @@ export default function LocationTable({
         const response = await fetch(
           `/locations?page=${
             paginationModel.page + 1
-          }&location_name=${searchQuery}&is_starred=${filter === "starred"}`
+          }&search=${searchQuery}&is_starred=${filter === "starred"}`
         );
         if (!response.ok) {
           throw new Error("Network response was not ok");
